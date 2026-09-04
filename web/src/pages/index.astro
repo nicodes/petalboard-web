@@ -1,12 +1,221 @@
 ---
-import { Counter } from '../components/Counter';
-import Title from '../components/Title.astro';
 import Layout from '../layouts/Layout.astro';
+
+const signalSteps = [
+	{ number: '01', label: 'Plug in', copy: 'Use your mic or USB guitar interface.' },
+	{ number: '02', label: 'Build a chain', copy: 'Tap in pedals and drag them into order.' },
+	{ number: '03', label: 'Shape the amp', copy: 'Pick a model, cabinet, gain, and EQ.' },
+	{ number: '04', label: 'Play', copy: 'Monitor the whole rig through headphones.' },
+];
+
+const featurePedals = [
+	{
+		className: 'feature-card--amber',
+		index: 'A',
+		eyebrow: 'Signal chain',
+		title: 'Stomp. Turn. Reorder.',
+		copy: 'Twelve familiar effects, direct controls, and a signal path you can reshape as quickly as inspiration hits.',
+		meta: '12 pedals / drag to patch',
+	},
+	{
+		className: 'feature-card--blue',
+		index: 'B',
+		eyebrow: 'Amp room',
+		title: 'From clean to loud.',
+		copy: 'Run your board into a Twin Clean, Crunch Combo, or Lead Stack, then match it with the right cabinet.',
+		meta: '3 amps / 3 cabinets',
+	},
+	{
+		className: 'feature-card--red',
+		index: 'C',
+		eyebrow: 'Local presets',
+		title: 'Keep the good ones.',
+		copy: 'Save complete rigs in your browser and jump from Bedroom Clean to Arena Lead without rebuilding a thing.',
+		meta: 'No login / no cloud',
+	},
+];
 ---
 
-<Layout>
-	<main class="flex flex-col items-center gap-12 px-6 py-16">
-		<Title />
-		<Counter client:visible />
-	</main>
+<Layout
+	title="Petalboard — Your guitar rig, in the browser"
+	description="Build a virtual guitar pedalboard, shape your amp, and monitor your guitar live from the browser."
+>
+	<div class="page-shell" id="top">
+		<header class="site-header">
+			<a class="brand" href="#top" aria-label="Petalboard home">
+				<span class="brand-mark" aria-hidden="true">
+					<span></span><span></span><i></i>
+				</span>
+				<span class="brand-name">PETAL<span>BOARD</span></span>
+			</a>
+
+			<nav class="site-nav" aria-label="Main navigation">
+				<a href="#signal">Signal path</a>
+				<a href="#workshop">Custom lab</a>
+				<a href="https://github.com/nicodes/petalboard-be" target="_blank" rel="noreferrer">Source <span aria-hidden="true">↗</span></a>
+			</nav>
+		</header>
+
+		<main>
+			<section class="hero" aria-labelledby="hero-title">
+				<div class="hero-copy">
+					<p class="eyebrow"><span class="status-dot"></span> Live guitar audio / browser rig</p>
+					<h1 id="hero-title">Build your sound.<br /><em>Then stomp on it.</em></h1>
+					<p class="hero-lede">Guitar in. Pedals. Amp. Headphones out. Petalboard turns the screen in front of you into a hands-on guitar rig.</p>
+					<div class="hero-actions">
+						<a class="button button--primary" href="#signal">Follow the signal <span aria-hidden="true">↓</span></a>
+						<span class="availability">Web build in progress</span>
+					</div>
+				</div>
+
+				<div class="rig-scene" aria-label="A Petalboard rig with overdrive, delay, reverb, and an amplifier">
+					<div class="rig-note rig-note--top" aria-hidden="true"><span>Input</span><b>Signal live</b></div>
+					<div class="rig-note rig-note--side" aria-hidden="true"><span>Output</span><b>Headphones</b></div>
+					<div class="patch-cable patch-cable--in" aria-hidden="true"></div>
+					<div class="patch-cable patch-cable--out" aria-hidden="true"></div>
+
+					<div class="pedalboard">
+						<div class="io-rack">
+							<div class="jack-group"><i class="jack"></i><span>Guitar in</span></div>
+							<div class="rack-title"><b>Petalboard</b><span>Live rig / 01</span></div>
+							<div class="meter" aria-hidden="true">
+								<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+							</div>
+							<div class="jack-group jack-group--right"><i class="jack"></i><span>Phones</span></div>
+						</div>
+
+						<div class="pedal-row">
+							<div class="mini-pedal mini-pedal--yellow">
+								<span class="pedal-screw pedal-screw--tl"></span><span class="pedal-screw pedal-screw--tr"></span>
+								<div class="knob-row">
+									<div><i class="knob knob--one"></i><span>Drive</span></div>
+									<div><i class="knob knob--two"></i><span>Tone</span></div>
+									<div><i class="knob knob--three"></i><span>Level</span></div>
+								</div>
+								<div class="pedal-label"><small>PB / 02</small><strong>Tube<br />Overdrive</strong></div>
+								<i class="pedal-led"></i><i class="stomp"></i>
+							</div>
+
+							<div class="mini-pedal mini-pedal--purple">
+								<span class="pedal-screw pedal-screw--tl"></span><span class="pedal-screw pedal-screw--tr"></span>
+								<div class="knob-row">
+									<div><i class="knob knob--four"></i><span>Time</span></div>
+									<div><i class="knob knob--one"></i><span>Feed</span></div>
+									<div><i class="knob knob--two"></i><span>Mix</span></div>
+								</div>
+								<div class="pedal-label"><small>PB / 09</small><strong>Tape<br />Delay</strong></div>
+								<i class="pedal-led"></i><i class="stomp"></i>
+							</div>
+
+							<div class="mini-pedal mini-pedal--blue">
+								<span class="pedal-screw pedal-screw--tl"></span><span class="pedal-screw pedal-screw--tr"></span>
+								<div class="knob-row">
+									<div><i class="knob knob--three"></i><span>Decay</span></div>
+									<div><i class="knob knob--four"></i><span>Tone</span></div>
+									<div><i class="knob knob--one"></i><span>Mix</span></div>
+								</div>
+								<div class="pedal-label"><small>PB / 10</small><strong>Hall<br />Reverb</strong></div>
+								<i class="pedal-led"></i><i class="stomp"></i>
+							</div>
+						</div>
+
+						<div class="amp-rack">
+							<div class="amp-brand"><small>Amplifier</small><strong>Twin<br />Clean</strong></div>
+							<div class="amp-controls">
+								<div><i class="amp-knob"></i><span>Gain</span></div><div><i class="amp-knob amp-knob--2"></i><span>Bass</span></div><div><i class="amp-knob amp-knob--3"></i><span>Mid</span></div><div><i class="amp-knob amp-knob--4"></i><span>Treble</span></div><div><i class="amp-knob amp-knob--5"></i><span>Master</span></div>
+							</div>
+							<div class="amp-cab"><span>2 × 12</span></div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="signal-section" id="signal" aria-labelledby="signal-title">
+				<div class="section-heading section-heading--dark">
+					<p class="eyebrow">One clean route from string to speaker</p>
+					<h2 id="signal-title">The shortest path<br />to <em>your</em> sound.</h2>
+				</div>
+
+				<ol class="signal-path">
+					{signalSteps.map((step, index) => (
+						<li>
+							<div class="signal-icon" aria-hidden="true">
+								{index === 0 && <><span class="plug-line"></span><i class="plug-head"></i></>}
+								{index === 1 && <><i class="tiny-box tiny-box--one"></i><i class="tiny-box tiny-box--two"></i><i class="tiny-box tiny-box--three"></i></>}
+								{index === 2 && <><i class="amp-line"></i><span class="amp-dots">••••</span></>}
+								{index === 3 && <><i class="phone-band"></i><i class="phone-cup phone-cup--left"></i><i class="phone-cup phone-cup--right"></i></>}
+							</div>
+							<div class="signal-copy"><span>{step.number}</span><h3>{step.label}</h3><p>{step.copy}</p></div>
+						</li>
+					))}
+				</ol>
+			</section>
+
+			<section class="features-section" aria-labelledby="features-title">
+				<div class="section-heading">
+					<p class="eyebrow">Built to feel immediate</p>
+					<h2 id="features-title">Less setup.<br /><em>More signal.</em></h2>
+					<p>All the useful parts of a physical rig, without crawling around the floor looking for the cable that came loose.</p>
+				</div>
+
+				<div class="feature-grid">
+					{featurePedals.map((feature) => (
+						<article class:list={['feature-card', feature.className]}>
+							<div class="feature-top"><span>{feature.index}</span><i aria-hidden="true"></i></div>
+							<p class="feature-eyebrow">{feature.eyebrow}</p>
+							<h3>{feature.title}</h3>
+							<p>{feature.copy}</p>
+							<div class="feature-meta"><span>{feature.meta}</span><i class="feature-switch" aria-hidden="true"></i></div>
+						</article>
+					))}
+				</div>
+			</section>
+
+			<section class="workshop-section" id="workshop" aria-labelledby="workshop-title">
+				<div class="workshop-visual" aria-hidden="true">
+					<div class="blueprint-label"><span>Custom lab</span><b>Signal recipe / 004</b></div>
+					<div class="blueprint-flow">
+						<span class="flow-port">IN</span>
+						<div class="flow-node"><small>01</small><b>Drive</b><i></i></div>
+						<div class="flow-split">
+							<div class="flow-node"><small>02A</small><b>Chorus</b><i></i></div>
+							<div class="flow-node"><small>02B</small><b>Delay</b><i></i></div>
+						</div>
+						<div class="flow-node"><small>03</small><b>Reverb</b><i></i></div>
+						<span class="flow-port">OUT</span>
+					</div>
+					<div class="blueprint-scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+				</div>
+
+				<div class="workshop-copy">
+					<p class="eyebrow">Custom lab / built in</p>
+					<h2 id="workshop-title">When the right pedal doesn’t exist, <em>build it.</em></h2>
+					<p>Stack effects in series, split them into parallel lanes, add modulation, and map the controls that matter. Then paint the enclosure and patch it straight into your rig.</p>
+					<ul>
+						<li><span>01</span> Serial + parallel signal recipes</li>
+						<li><span>02</span> Up to 8 mapped controls</li>
+						<li><span>03</span> 4 assignable LFOs</li>
+					</ul>
+				</div>
+			</section>
+
+			<section class="closing-section" aria-labelledby="closing-title">
+				<p class="eyebrow"><span class="status-dot"></span> No accounts. No cloud. Just your rig.</p>
+				<h2 id="closing-title">Your next board is<br />already <em>within reach.</em></h2>
+				<div class="closing-actions">
+					<a class="button button--primary" href="https://github.com/nicodes/petalboard-be" target="_blank" rel="noreferrer">Follow the build <span aria-hidden="true">↗</span></a>
+					<p>Open source<br /><span>Built for the browser</span></p>
+				</div>
+			</section>
+		</main>
+
+		<footer class="site-footer">
+			<a class="brand" href="#top" aria-label="Back to top">
+				<span class="brand-mark" aria-hidden="true"><span></span><span></span><i></i></span>
+				<span class="brand-name">PETAL<span>BOARD</span></span>
+			</a>
+			<p>Plug in. Stomp. Listen.</p>
+			<a href="#top">Back to top ↑</a>
+		</footer>
+	</div>
 </Layout>
